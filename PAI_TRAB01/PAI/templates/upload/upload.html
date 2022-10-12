@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Upload and crop{% endblock %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="https://unpkg.com/jcrop/dist/jcrop.css">
+{% endblock %}
+
+{% block content %}
+<h1>
+BOM DIA
+</h1>
+<div>
+    <form runat="server" id="formImg" action="#" method="POST">
+        {% csrf_token %}
+        <input accept="image/jpeg, image/png" type='file' id="imgInp" name="img" />
+        <input type="text" class="d-none" id="teste" name="imgBase">
+
+        {% if img %}
+            <img src="{{ img }}" id="imgCrop" alt="your image" />
+        {% endif %}
+    </form>
+   <button id="btnTeste"> teste </button>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+{% if img %}
+<script src="https://unpkg.com/jcrop"></script>
+{% endif %}
+
+<script src="{% static 'js/upload.js' %}"></script>
+
+{% endblock %}
