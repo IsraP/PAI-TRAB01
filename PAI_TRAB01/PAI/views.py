@@ -101,3 +101,25 @@ def classify_knn_binary(request):
     result.save()
 
     return redirect(classify)
+
+def classify_alexnet(request):
+    joelhosTreino = Joelho.objects.filter(processado=True, classificado=False, tipo='train')
+    joelhosTeste = Joelho.objects.filter(processado=True, classificado=False, tipo='test')
+    joelhosValid = Joelho.objects.filter(processado=True, classificado=False, tipo='validate')
+
+    result, matrix = knn_classify(joelhosTreino, joelhosTeste, joelhosValid)
+
+    result.save()
+
+    return redirect(manipulate)
+
+def classify_alexnet_binary(request):
+    joelhosTreino = Joelho.objects.filter(processado=True, classificado=False, tipo='train')
+    joelhosTeste = Joelho.objects.filter(processado=True, classificado=False, tipo='test')
+    joelhosValid = Joelho.objects.filter(processado=True, classificado=False, tipo='validate')
+
+    result, matrix = knn_classify_binary(joelhosTreino, joelhosTeste, joelhosValid)
+
+    result.save()
+
+    return redirect(classify)
