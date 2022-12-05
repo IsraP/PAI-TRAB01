@@ -3,6 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from io import BytesIO
 import base64
+from PAI.service.persistence_service import save_preprocessed
 
 def findCropInImage(img, template):
     template = getImgFromB64(template)
@@ -30,6 +31,31 @@ def findCropInImage(img, template):
     
     return getB64FromImg(img)
 
+def preprocess(joelhos):
+    newImages = []
+
+    for joelho in joelhos:
+        img = getImgFromB64Internal(joelho.imagem)
+
+        inverter = cv.flip(img, 1)
+
+        newImages.append({
+            "img": getB64FromImg(inverter),
+            "type": joelho.tipo,
+            "label": joelho.rotulo
+        })
+
+        img_equalizada = cv.equalizeHist(img)
+
+        newImages.append({
+            "img": getB64FromImg(img_equalizada),
+            "type": joelho.tipo,
+            "label": joelho.rotulo
+        })
+
+
+    save_preprocessed(newImages)
+
 def getImgFromB64(b64):
     encoded_data = b64.split(',')
 
@@ -43,8 +69,16 @@ def getImgFromB64(b64):
 
     return img
 
+def getImgFromB64Internal(b64):
+    encoded_data = b64
+
+    nparr = np.fromstring(base64.b64decode(encoded_data), np.uint8)
+    img = cv.imdecode(nparr, 0)
+
+    return img
+
 def getB64FromImg(img):
-    retval, buffer_img= cv.imencode('.png', img)
+    retval, buffer_img = cv.imencode('.png', img)
     data = base64.b64encode(buffer_img)
     img_str = data.decode("utf-8")
 

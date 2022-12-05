@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Upload and crop{% endblock %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="https://unpkg.com/jcrop/dist/jcrop.css">
+{% endblock %}
+
+{% block content %}
+<div class="p-2 pl-3">
+    <form action="#" method="POST">
+        {% csrf_token %}
+        <h5>Instrução</h5>
+        <ul>
+            <li>Cole os caminhos completos dos diretorios em que estarão os arquivos</li>
+        </ul>
+        <div>
+            <p class="m-1">Diretorio de Treinamento</p>
+            <input type="text" name="trainPath" id="trainPath">
+        </div>
+        <div>
+            <p class="m-1">Diretorio de Teste</p>
+            <input type="text" name="testPath" id="testPath">
+        </div>
+        <div>
+            <p class="m-1">Diretorio de Validação</p>
+            <input type="text" name="validatePath" id="validatePath">
+        </div>
+        <button class="btn custom-file-upload mt-3" type="submit">Selecionar</button>
+    </form>
+    <a class="btn custom-file-upload mt-3" href="{% url 'preprocess' %}">Processar</a>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+{% if img %}
+<script src="https://unpkg.com/jcrop"></script>
+{% endif %}
+
+<script src="{% static 'js/upload.js' %}"></script>
+
+{% endblock %}
